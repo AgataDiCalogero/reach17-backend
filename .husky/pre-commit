@@ -1,1 +1,2 @@
-npm.cmd test
+#!/usr/bin/env sh
+./node_modules/.bin/lint-staged

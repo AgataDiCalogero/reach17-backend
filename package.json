@@ -4,8 +4,8 @@
   "description": "Reach17 - REST API Node/Express + MySQL (Start2Impact)",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js",
-    "start": "node index.js",
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js",
     "test": "mocha",
     "db:smoke": "node scripts/db-smoke.js",
     "lint": "eslint .",

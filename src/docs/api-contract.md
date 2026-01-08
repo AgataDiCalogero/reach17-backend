@@ -18,7 +18,7 @@ Esempio:
 {
   "error": {
     "code": "DUPLICATE_RESOURCE",
-    "message": "Course type already exists",
+    "message": "Tipologia di corso già esistente",
     "details": []
   }
 }
@@ -44,9 +44,9 @@ Esempio:
 - Response:
   - `201`
   - Body: `{ "id": number, "name": string, "created_at": string, "updated_at": string }`
-- Errors:
-  - `400` `VALIDATION_ERROR` (name missing/empty)
-  - `409` `DUPLICATE_RESOURCE` (name already exists)
+- Errori:
+  - `400` `VALIDATION_ERROR` (nome mancante/vuoto)
+  - `409` `DUPLICATE_RESOURCE` (nome già esistente)
 
 ### 1.2 Lista tipologie di corso
 
@@ -65,10 +65,10 @@ Esempio:
 - Response:
   - `200`
   - Body: `{ id, name, created_at, updated_at }`
-- Errors:
+- Errori:
   - `400` `VALIDATION_ERROR`
   - `404` `NOT_FOUND`
-  - `409` `DUPLICATE_RESOURCE` (duplicate name)
+  - `409` `DUPLICATE_RESOURCE` (nome duplicato)
 
 ### 1.4 Eliminare una tipologia di corso
 
@@ -76,9 +76,9 @@ Esempio:
 - Query params: none
 - Response:
   - `204`
-- Errors:
+- Errori:
   - `404` `NOT_FOUND`
-  - `409` `CONFLICT` (courses reference this type)
+  - `409` `CONFLICT` (corsi associati a questa tipologia)
 
 ---
 
@@ -93,7 +93,7 @@ Esempio:
 - Response:
   - `201`
   - Body: `{ id, name, created_at, updated_at }`
-- Errors:
+- Errori:
   - `400` `VALIDATION_ERROR`
   - `409` `DUPLICATE_RESOURCE`
 
@@ -114,7 +114,7 @@ Esempio:
 - Response:
   - `200`
   - Body: `{ id, name, created_at, updated_at }`
-- Errors:
+- Errori:
   - `400` `VALIDATION_ERROR`
   - `404` `NOT_FOUND`
   - `409` `DUPLICATE_RESOURCE`
@@ -125,9 +125,9 @@ Esempio:
 - Query params: none
 - Response:
   - `204`
-- Errors:
+- Errori:
   - `404` `NOT_FOUND`
-  - `409` `CONFLICT` (has associations)
+  - `409` `CONFLICT` (ha associazioni)
 
 ---
 
@@ -144,7 +144,7 @@ Esempio:
 - Response:
   - `201`
   - Body: `{ id, name, course_type_id, created_at, updated_at }`
-- Errors:
+- Errori:
   - `400` `VALIDATION_ERROR`
   - `404` `COURSE_TYPE_NOT_FOUND`
 
@@ -159,8 +159,8 @@ Esempio:
 - Response:
   - `200`
   - Body: `[{ id, name, course_type: { id, name }, universities: [{ id, name }] }]`
-- Errors:
-  - `400` `VALIDATION_ERROR` (invalid query params)
+- Errori:
+  - `400` `VALIDATION_ERROR` (parametri query non validi)
 
 ### 3.3 Aggiornare un corso
 
@@ -172,7 +172,7 @@ Esempio:
 - Response:
   - `200`
   - Body: `{ id, name, course_type_id, created_at, updated_at }`
-- Errors:
+- Errori:
   - `400` `VALIDATION_ERROR`
   - `404` `COURSE_NOT_FOUND`
   - `404` `COURSE_TYPE_NOT_FOUND`
@@ -183,7 +183,7 @@ Esempio:
 - Query params: none
 - Response:
   - `204`
-- Errors:
+- Errori:
   - `404` `COURSE_NOT_FOUND`
 
 Nota: la delete deve gestire le associazioni nella join table (DB constraint, cascade o delete manuale).
@@ -200,7 +200,7 @@ Nota: la delete deve gestire le associazioni nella join table (DB constraint, ca
 - Response:
   - `201`
   - Body: `{ course_id, university_id }`
-- Errors:
+- Errori:
   - `404` `COURSE_NOT_FOUND`
   - `404` `UNIVERSITY_NOT_FOUND`
   - `409` `DUPLICATE_RESOURCE`
@@ -211,7 +211,7 @@ Nota: la delete deve gestire le associazioni nella join table (DB constraint, ca
 - Query params: none
 - Response:
   - `204`
-- Errors:
+- Errori:
   - `404` `ASSOCIATION_NOT_FOUND`
 
 ---
