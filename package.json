@@ -1,0 +1,57 @@
+{
+  "name": "reach17-backend",
+  "version": "1.0.0",
+  "description": "Reach17 - REST API Node/Express + MySQL (Start2Impact)",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "start": "node index.js",
+    "test": "mocha",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "prepare": "husky"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AgataDiCalogero/reach17-backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": "20.x"
+  },
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/AgataDiCalogero/reach17-backend/issues"
+  },
+  "homepage": "https://github.com/AgataDiCalogero/reach17-backend#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "helmet": "^8.1.0",
+    "morgan": "^1.10.1",
+    "mysql2": "^3.16.0"
+  },
+  "devDependencies": {
+    "chai": "^6.2.2",
+    "eslint": "^9.39.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "mocha": "^11.7.5",
+    "nodemon": "^3.1.11",
+    "prettier": "^3.7.4",
+    "sinon": "^21.0.1",
+    "supertest": "^7.2.2"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
+  }
+}

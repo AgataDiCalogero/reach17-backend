@@ -137,3 +137,16 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Vercel
+.vercel/
+
+# IDEs
+.vscode/
+.idea/
+*.iml
