@@ -7,6 +7,7 @@
     "dev": "nodemon index.js",
     "start": "node index.js",
     "test": "mocha",
+    "db:smoke": "node scripts/db-smoke.js",
     "lint": "eslint .",
     "format": "prettier --write .",
     "prepare": "husky"
