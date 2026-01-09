@@ -17,6 +17,7 @@ cp .env.example .env
 ## Configurazione (.env)
 
 Compila `.env` con le credenziali del database e, in produzione, `CORS_ORIGIN`.
+Se `CORS_ORIGIN` è vuoto in produzione, nessun origin viene autorizzato.
 
 Variabili principali:
 
@@ -35,6 +36,11 @@ Variabili principali:
 npm run db:smoke
 ```
 
+## Migrazioni
+
+Lo schema e disponibile in `migrations.sql`. Esegui le migrazioni con il client
+MySQL compatibile (es. TiDB Cloud) secondo il tuo ambiente.
+
 ## Test
 
 ```bash
@@ -46,6 +52,8 @@ Test di integrazione su DB reale (richiede `.env` configurato):
 ```bash
 npm run test:integration
 ```
+
+Lo script imposta `RUN_INTEGRATION=true` ed esegue solo i test in `test/integration`.
 
 ## Avvio
 
@@ -69,4 +77,10 @@ npm run dev
 ## Swagger
 
 - Endpoint previsto: `/api-docs`.
-- Al momento non è attivo: verrà aggiunto con la documentazione OpenAPI.
+- Spec OpenAPI disponibile in `src/docs/openapi.yaml` (Swagger UI non ancora integrata).
+
+## Documentazione
+
+- Contratto API: `src/docs/api-contract.md`
+- Schema DB: `src/docs/db-schema.md`
+- Requisiti e casi d'uso: `src/docs/requirements.md`, `src/docs/use-cases.md`

@@ -16,7 +16,12 @@ function buildDetails(details, fallback, value) {
 
 function toPositiveInt(
   id,
-  { fieldName = 'id', required = true, message = 'Invalid id', details } = {},
+  {
+    fieldName = 'id',
+    required = true,
+    message = 'ID non valido',
+    details,
+  } = {},
 ) {
   const payload = { field: fieldName, value: toNullableValue(id) }
   if (id == null || id === '') {
@@ -49,8 +54,8 @@ function normalizeName(
   {
     required = false,
     fieldName = 'name',
-    requiredMessage = 'Name is required',
-    invalidMessage = 'Invalid name',
+    requiredMessage = 'Il nome è obbligatorio',
+    invalidMessage = 'Nome non valido',
     details,
   } = {},
 ) {
@@ -102,7 +107,7 @@ function isProvidedValue(value) {
 function requireAtLeastOneField(
   payload,
   fieldsArray,
-  { message = 'At least one field must be provided', details } = {},
+  { message = 'È necessario fornire almeno un campo', details } = {},
 ) {
   const fields = Array.isArray(fieldsArray) ? fieldsArray : []
   const hasValue = fields.some((field) =>

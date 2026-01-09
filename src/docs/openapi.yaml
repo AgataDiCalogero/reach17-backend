@@ -1,0 +1,155 @@
+openapi: 3.0.3
+info:
+  title: Reach17 API
+  version: 1.0.0
+servers:
+  - url: /api/v1
+paths:
+  /course-types:
+    get:
+      summary: Lista tipologie di corso
+      responses:
+        '200':
+          description: Lista tipologie
+    post:
+      summary: Crea una tipologia di corso
+      responses:
+        '201':
+          description: Tipologia creata
+  /course-types/{id}:
+    patch:
+      summary: Aggiorna una tipologia di corso
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Tipologia aggiornata
+    delete:
+      summary: Elimina una tipologia di corso
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Tipologia eliminata
+  /universities:
+    get:
+      summary: Lista atenei
+      responses:
+        '200':
+          description: Lista atenei
+    post:
+      summary: Crea un ateneo
+      responses:
+        '201':
+          description: Ateneo creato
+  /universities/{id}:
+    patch:
+      summary: Aggiorna un ateneo
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Ateneo aggiornato
+    delete:
+      summary: Elimina un ateneo
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Ateneo eliminato
+  /courses:
+    get:
+      summary: Lista corsi con atenei e tipologia
+      parameters:
+        - name: name
+          in: query
+          schema:
+            type: string
+        - name: course_type
+          in: query
+          schema:
+            type: string
+        - name: course_type_id
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista corsi
+    post:
+      summary: Crea un corso
+      responses:
+        '201':
+          description: Corso creato
+  /courses/{id}:
+    patch:
+      summary: Aggiorna un corso
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Corso aggiornato
+    delete:
+      summary: Elimina un corso
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Corso eliminato
+  /courses/{courseId}/universities/{universityId}:
+    post:
+      summary: Crea associazione corso-ateneo
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: universityId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '201':
+          description: Associazione creata
+    delete:
+      summary: Elimina associazione corso-ateneo
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: universityId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Associazione eliminata

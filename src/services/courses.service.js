@@ -86,10 +86,11 @@ async function createCourse({ name, course_type_id }) {
 
 async function listCourses({ name, course_type, course_type_id } = {}) {
   const normalizedName = normalizeCourseName(name, { required: false })
-  const normalizedCourseType = normalizeCourseTypeName(course_type)
   const numericCourseTypeId = toCourseTypeId(course_type_id, {
     required: false,
   })
+  const normalizedCourseType =
+    numericCourseTypeId != null ? null : normalizeCourseTypeName(course_type)
 
   const courses = await coursesRepository.findAllBase({
     name: normalizedName,
