@@ -4,6 +4,7 @@ const helmet = require('helmet')
 const morgan = require('morgan')
 const healthRouter = require('./routes/health.routes')
 const courseTypesRouter = require('./routes/courseTypes.routes')
+const universitiesRouter = require('./routes/universities.routes')
 const notFound = require('./middlewares/notFound')
 const errorHandler = require('./middlewares/errorHandler')
 
@@ -38,6 +39,7 @@ if (process.env.NODE_ENV !== 'production') {
 // Routes
 app.use('/health', healthRouter)
 app.use('/api/v1/course-types', courseTypesRouter)
+app.use('/api/v1/universities', universitiesRouter)
 
 // Not Found
 app.use(notFound)

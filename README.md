@@ -69,4 +69,4 @@ npm run dev
 ## Swagger
 
 - Endpoint previsto: `/api-docs`.
-- Al momento non e attivo: verra aggiunto con la documentazione OpenAPI.
+- Al momento non è attivo: verrà aggiunto con la documentazione OpenAPI.

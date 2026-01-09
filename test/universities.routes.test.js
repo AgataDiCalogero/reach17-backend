@@ -2,29 +2,29 @@ const request = require('supertest')
 const sinon = require('sinon')
 const { expect } = require('chai')
 const AppError = require('../src/errors/AppError')
-const courseTypesService = require('../src/services/courseTypes.service')
+const universitiesService = require('../src/services/universities.service')
 const app = require('../src/app')
 
-describe('course types routes', () => {
+describe('universities routes', () => {
   afterEach(() => {
     sinon.restore()
   })
 
   describe('happy path', () => {
-    it('POST /api/v1/course-types returns 201 and body', async () => {
+    it('POST /api/v1/universities returns 201 and body', async () => {
       const now = '2024-01-01T10:00:00.000Z'
       const created = { id: 1, name: 'X', created_at: now, updated_at: now }
-      sinon.stub(courseTypesService, 'createCourseType').resolves(created)
+      sinon.stub(universitiesService, 'createUniversity').resolves(created)
 
       const res = await request(app)
-        .post('/api/v1/course-types')
+        .post('/api/v1/universities')
         .send({ name: 'X' })
 
       expect(res.status).to.equal(201)
       expect(res.body).to.deep.equal(created)
     })
 
-    it('GET /api/v1/course-types returns 200', async () => {
+    it('GET /api/v1/universities returns 200', async () => {
       const list = [
         {
           id: 1,
@@ -33,50 +33,51 @@ describe('course types routes', () => {
           updated_at: '2024-01-01T10:00:00.000Z',
         },
       ]
-      sinon.stub(courseTypesService, 'listCourseTypes').resolves(list)
+      sinon.stub(universitiesService, 'listUniversities').resolves(list)
 
-      const res = await request(app).get('/api/v1/course-types')
+      const res = await request(app).get('/api/v1/universities')
 
       expect(res.status).to.equal(200)
       expect(res.body).to.deep.equal(list)
     })
 
-    it('PATCH /api/v1/course-types/1 returns 200', async () => {
+    it('PATCH /api/v1/universities/1 returns 200', async () => {
       const updated = {
         id: 1,
         name: 'Updated',
         created_at: '2024-01-01T10:00:00.000Z',
         updated_at: '2024-01-02T10:00:00.000Z',
       }
-      sinon.stub(courseTypesService, 'updateCourseType').resolves(updated)
+      sinon.stub(universitiesService, 'updateUniversity').resolves(updated)
 
       const res = await request(app)
-        .patch('/api/v1/course-types/1')
+        .patch('/api/v1/universities/1')
         .send({ name: 'Updated' })
 
       expect(res.status).to.equal(200)
       expect(res.body).to.deep.equal(updated)
     })
 
-    it('DELETE /api/v1/course-types/1 returns 204 and empty body', async () => {
-      sinon.stub(courseTypesService, 'deleteCourseType').resolves(true)
+    it('DELETE /api/v1/universities/1 returns 204 and empty body', async () => {
+      sinon.stub(universitiesService, 'deleteUniversity').resolves(true)
 
-      const res = await request(app).delete('/api/v1/course-types/1')
+      const res = await request(app).delete('/api/v1/universities/1')
 
       expect(res.status).to.equal(204)
       expect(res.text).to.equal('')
+      expect(res.body).to.deep.equal({})
     })
   })
 
   describe('error path', () => {
-    it('POST /api/v1/course-types returns 400 AppError format', async () => {
+    it('POST /api/v1/universities returns 400 AppError format', async () => {
       const error = new AppError(400, 'VALIDATION_ERROR', 'Dati non validi', [
         { field: 'name' },
       ])
-      sinon.stub(courseTypesService, 'createCourseType').rejects(error)
+      sinon.stub(universitiesService, 'createUniversity').rejects(error)
 
       const res = await request(app)
-        .post('/api/v1/course-types')
+        .post('/api/v1/universities')
         .send({ name: '' })
 
       expect(res.status).to.equal(400)
@@ -89,48 +90,22 @@ describe('course types routes', () => {
       })
     })
 
-    it('POST /api/v1/course-types returns 409 duplicate format', async () => {
-      const error = new AppError(
-        409,
-        'DUPLICATE_RESOURCE',
-        'Tipologia di corso già esistente',
-        [{ field: 'name' }],
-      )
-      sinon.stub(courseTypesService, 'createCourseType').rejects(error)
+    it('PATCH /api/v1/universities/1 returns 404 AppError format', async () => {
+      const error = new AppError(404, 'NOT_FOUND', 'Ateneo non trovato', [
+        { field: 'id', value: 1 },
+      ])
+      sinon.stub(universitiesService, 'updateUniversity').rejects(error)
 
       const res = await request(app)
-        .post('/api/v1/course-types')
-        .send({ name: 'X' })
-
-      expect(res.status).to.equal(409)
-      expect(res.body).to.deep.equal({
-        error: {
-          code: 'DUPLICATE_RESOURCE',
-          message: 'Tipologia di corso già esistente',
-          details: [{ field: 'name' }],
-        },
-      })
-    })
-
-    it('PATCH /api/v1/course-types/1 returns 404 AppError format', async () => {
-      const error = new AppError(
-        404,
-        'NOT_FOUND',
-        'Tipologia di corso non trovata',
-        [{ id: 1 }],
-      )
-      sinon.stub(courseTypesService, 'updateCourseType').rejects(error)
-
-      const res = await request(app)
-        .patch('/api/v1/course-types/1')
+        .patch('/api/v1/universities/1')
         .send({ name: 'Missing' })
 
       expect(res.status).to.equal(404)
       expect(res.body).to.deep.equal({
         error: {
           code: 'NOT_FOUND',
-          message: 'Tipologia di corso non trovata',
-          details: [{ id: 1 }],
+          message: 'Ateneo non trovato',
+          details: [{ field: 'id', value: 1 }],
         },
       })
     })
