@@ -2,6 +2,10 @@ const express = require('express')
 const cors = require('cors')
 const helmet = require('helmet')
 const morgan = require('morgan')
+const fs = require('node:fs')
+const path = require('node:path')
+const yaml = require('yaml')
+const swaggerUi = require('swagger-ui-express')
 const healthRouter = require('./routes/health.routes')
 const courseTypesRouter = require('./routes/courseTypes.routes')
 const universitiesRouter = require('./routes/universities.routes')
@@ -11,6 +15,9 @@ const errorHandler = require('./middlewares/errorHandler')
 
 const app = express()
 const corsOrigin = process.env.CORS_ORIGIN
+const openApiPath = path.join(__dirname, 'docs', 'openapi.yaml')
+const openApiYaml = fs.readFileSync(openApiPath, 'utf8')
+const openApiDocument = yaml.parse(openApiYaml)
 
 // Security: disable Express signature header
 app.disable('x-powered-by')
@@ -40,6 +47,10 @@ if (process.env.NODE_ENV !== 'production') {
 
 // Routes
 app.use('/health', healthRouter)
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openApiDocument))
+app.get('/openapi', (_req, res) => {
+  res.type('text/yaml').send(openApiYaml)
+})
 app.use('/api/v1/course-types', courseTypesRouter)
 app.use('/api/v1/universities', universitiesRouter)
 app.use('/api/v1/courses', coursesRouter)

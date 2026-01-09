@@ -47,13 +47,20 @@ MySQL compatibile (es. TiDB Cloud) secondo il tuo ambiente.
 npm test
 ```
 
+Lint:
+
+```bash
+npm run lint
+```
+
 Test di integrazione su DB reale (richiede `.env` configurato):
 
 ```bash
 npm run test:integration
 ```
 
-Lo script imposta `RUN_INTEGRATION=true` ed esegue solo i test in `test/integration`.
+Lo script imposta `RUN_INTEGRATION=true` ed esegue solo i test in `test/integration`
+su Windows/macOS/Linux.
 
 ## Avvio
 
@@ -76,8 +83,14 @@ npm run dev
 
 ## Swagger
 
-- Endpoint previsto: `/api-docs`.
-- Spec OpenAPI disponibile in `src/docs/openapi.yaml` (Swagger UI non ancora integrata).
+- Swagger UI: `http://localhost:3000/api-docs`.
+- Spec OpenAPI: `src/docs/openapi.yaml` (raw: `http://localhost:3000/openapi`).
+- Per testare: avvia il server e apri l'URL `/api-docs` nel browser.
+
+## Note operative
+
+- `CORS_ORIGIN` in produzione accetta una lista separata da virgola.
+- TiDB Cloud richiede TLS/SSL: imposta `TIDB_ENABLE_SSL=true` se richiesto.
 
 ## Documentazione
 

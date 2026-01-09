@@ -147,6 +147,7 @@ Esempio:
 - Errori:
   - `400` `VALIDATION_ERROR`
   - `404` `COURSE_TYPE_NOT_FOUND`
+  - `409` `DUPLICATE_RESOURCE` (nome duplicato per tipologia)
 
 ### 3.2 Lista corsi (con atenei + filtri)
 
@@ -176,6 +177,7 @@ Esempio:
   - `400` `VALIDATION_ERROR`
   - `404` `COURSE_NOT_FOUND`
   - `404` `COURSE_TYPE_NOT_FOUND`
+  - `409` `DUPLICATE_RESOURCE` (nome duplicato per tipologia)
 
 ### 3.4 Eliminare un corso
 
@@ -212,6 +214,8 @@ Nota: la delete deve gestire le associazioni nella join table (DB constraint, ca
 - Risposta:
   - `204`
 - Errori:
+  - `404` `COURSE_NOT_FOUND`
+  - `404` `UNIVERSITY_NOT_FOUND`
   - `404` `ASSOCIATION_NOT_FOUND`
 
 ---

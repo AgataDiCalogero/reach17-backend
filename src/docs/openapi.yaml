@@ -11,68 +11,132 @@ paths:
       responses:
         '200':
           description: Lista tipologie
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CourseType'
     post:
       summary: Crea una tipologia di corso
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourseTypeCreateInput'
       responses:
         '201':
           description: Tipologia creata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseType'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          $ref: '#/components/responses/Conflict'
   /course-types/{id}:
     patch:
       summary: Aggiorna una tipologia di corso
       parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
+        - $ref: '#/components/parameters/IdPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourseTypeUpdateInput'
       responses:
         '200':
           description: Tipologia aggiornata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseType'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
     delete:
       summary: Elimina una tipologia di corso
       parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
+        - $ref: '#/components/parameters/IdPath'
       responses:
         '204':
           description: Tipologia eliminata
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
   /universities:
     get:
       summary: Lista atenei
       responses:
         '200':
           description: Lista atenei
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/University'
     post:
       summary: Crea un ateneo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UniversityCreateInput'
       responses:
         '201':
           description: Ateneo creato
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/University'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          $ref: '#/components/responses/Conflict'
   /universities/{id}:
     patch:
       summary: Aggiorna un ateneo
       parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
+        - $ref: '#/components/parameters/IdPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UniversityUpdateInput'
       responses:
         '200':
           description: Ateneo aggiornato
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/University'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
     delete:
       summary: Elimina un ateneo
       parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
+        - $ref: '#/components/parameters/IdPath'
       responses:
         '204':
           description: Ateneo eliminato
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
   /courses:
     get:
       summary: Lista corsi con atenei e tipologia
@@ -85,71 +149,288 @@ paths:
           in: query
           schema:
             type: string
+          description: Usato solo se course_type_id non e' presente.
         - name: course_type_id
           in: query
           schema:
             type: integer
+          description: Ha precedenza su course_type.
       responses:
         '200':
           description: Lista corsi
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CourseWithUniversities'
+        '400':
+          $ref: '#/components/responses/BadRequest'
     post:
       summary: Crea un corso
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourseCreateInput'
       responses:
         '201':
           description: Corso creato
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
   /courses/{id}:
     patch:
       summary: Aggiorna un corso
       parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
+        - $ref: '#/components/parameters/IdPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourseUpdateInput'
       responses:
         '200':
           description: Corso aggiornato
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
     delete:
       summary: Elimina un corso
       parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
+        - $ref: '#/components/parameters/IdPath'
       responses:
         '204':
           description: Corso eliminato
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
   /courses/{courseId}/universities/{universityId}:
     post:
       summary: Crea associazione corso-ateneo
       parameters:
-        - name: courseId
-          in: path
-          required: true
-          schema:
-            type: integer
-        - name: universityId
-          in: path
-          required: true
-          schema:
-            type: integer
+        - $ref: '#/components/parameters/CourseIdPath'
+        - $ref: '#/components/parameters/UniversityIdPath'
       responses:
         '201':
           description: Associazione creata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseUniversity'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
     delete:
       summary: Elimina associazione corso-ateneo
       parameters:
-        - name: courseId
-          in: path
-          required: true
-          schema:
-            type: integer
-        - name: universityId
-          in: path
-          required: true
-          schema:
-            type: integer
+        - $ref: '#/components/parameters/CourseIdPath'
+        - $ref: '#/components/parameters/UniversityIdPath'
       responses:
         '204':
           description: Associazione eliminata
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  parameters:
+    IdPath:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+    CourseIdPath:
+      name: courseId
+      in: path
+      required: true
+      schema:
+        type: integer
+    UniversityIdPath:
+      name: universityId
+      in: path
+      required: true
+      schema:
+        type: integer
+  responses:
+    BadRequest:
+      description: Richiesta non valida
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: Risorsa non trovata
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Conflict:
+      description: Conflitto
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  schemas:
+    CourseType:
+      type: object
+      required: [id, name, created_at, updated_at]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    CourseTypeCreateInput:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+    CourseTypeUpdateInput:
+      type: object
+      properties:
+        name:
+          type: string
+    University:
+      type: object
+      required: [id, name, created_at, updated_at]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    UniversityCreateInput:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+    UniversityUpdateInput:
+      type: object
+      properties:
+        name:
+          type: string
+    Course:
+      type: object
+      required: [id, name, course_type_id, created_at, updated_at]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        course_type_id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    CourseCreateInput:
+      type: object
+      required: [name, course_type_id]
+      properties:
+        name:
+          type: string
+        course_type_id:
+          type: integer
+    CourseUpdateInput:
+      type: object
+      properties:
+        name:
+          type: string
+        course_type_id:
+          type: integer
+    CourseTypeRef:
+      type: object
+      required: [id, name]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+    UniversityRef:
+      type: object
+      required: [id, name]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+    CourseWithUniversities:
+      type: object
+      required: [id, name, course_type, universities]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        course_type:
+          $ref: '#/components/schemas/CourseTypeRef'
+        universities:
+          type: array
+          items:
+            $ref: '#/components/schemas/UniversityRef'
+    CourseUniversity:
+      type: object
+      required: [course_id, university_id]
+      properties:
+        course_id:
+          type: integer
+        university_id:
+          type: integer
+    ErrorResponse:
+      type: object
+      required: [error]
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+    Error:
+      type: object
+      required: [code, message, details]
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetail'
+    ErrorDetail:
+      type: object
+      description: Dettagli variabili (campo/valore/contesto).
+      additionalProperties: true
