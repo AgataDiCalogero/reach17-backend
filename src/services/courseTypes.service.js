@@ -1,46 +1,26 @@
 const AppError = require('../errors/AppError')
 const courseTypesRepository = require('../repositories/courseTypes.repository')
+const { isDuplicateError, isFkRestrictError } = require('../db/dbErrors')
+const {
+  toPositiveInt,
+  normalizeName,
+  requireAtLeastOneField,
+} = require('../validators/common.validators')
 
-function toPositiveInt(id) {
-  const numericId = Number(id)
-  if (!Number.isInteger(numericId) || numericId <= 0) {
-    throw new AppError(400, 'VALIDATION_ERROR', 'ID non valido', [{ id }])
-  }
-  return numericId
+function toCourseTypeId(id) {
+  return toPositiveInt(id, {
+    fieldName: 'id',
+    message: 'ID non valido',
+  })
 }
 
-function normalizeName(name, { required }) {
-  if (name == null) {
-    if (required) {
-      throw new AppError(400, 'VALIDATION_ERROR', 'Il nome e obbligatorio', [
-        { field: 'name' },
-      ])
-    }
-    return null
-  }
-
-  if (typeof name !== 'string') {
-    throw new AppError(400, 'VALIDATION_ERROR', 'Nome non valido', [
-      { field: 'name' },
-    ])
-  }
-
-  const trimmed = name.trim()
-  if (!trimmed) {
-    throw new AppError(400, 'VALIDATION_ERROR', 'Nome non valido', [
-      { field: 'name' },
-    ])
-  }
-
-  return trimmed
-}
-
-function isDuplicateError(err) {
-  return err && (err.code === 'ER_DUP_ENTRY' || err.errno === 1062)
-}
-
-function isFkRestrictError(err) {
-  return err && (err.code === 'ER_ROW_IS_REFERENCED_2' || err.errno === 1451)
+function normalizeCourseTypeName(name, { required }) {
+  return normalizeName(name, {
+    required,
+    fieldName: 'name',
+    requiredMessage: 'Il nome e obbligatorio',
+    invalidMessage: 'Nome non valido',
+  })
 }
 
 function throwDuplicateName() {
@@ -53,7 +33,7 @@ function throwDuplicateName() {
 }
 
 async function createCourseType({ name }) {
-  const normalizedName = normalizeName(name, { required: true })
+  const normalizedName = normalizeCourseTypeName(name, { required: true })
   try {
     return await courseTypesRepository.create(normalizedName)
   } catch (err) {
@@ -69,16 +49,11 @@ async function listCourseTypes() {
 }
 
 async function updateCourseType(id, { name }) {
-  const numericId = toPositiveInt(id)
-  const normalizedName = normalizeName(name, { required: false })
-  if (normalizedName == null) {
-    throw new AppError(
-      400,
-      'VALIDATION_ERROR',
-      'E necessario fornire almeno un campo',
-      [{ field: 'name' }],
-    )
-  }
+  const numericId = toCourseTypeId(id)
+  const normalizedName = normalizeCourseTypeName(name, { required: false })
+  requireAtLeastOneField({ name: normalizedName }, ['name'], {
+    message: 'E necessario fornire almeno un campo',
+  })
 
   try {
     const updated = await courseTypesRepository.updateById(
@@ -100,7 +75,7 @@ async function updateCourseType(id, { name }) {
 }
 
 async function deleteCourseType(id) {
-  const numericId = toPositiveInt(id)
+  const numericId = toCourseTypeId(id)
   try {
     const deleted = await courseTypesRepository.deleteById(numericId)
     if (!deleted) {
