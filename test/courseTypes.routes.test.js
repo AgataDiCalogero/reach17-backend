@@ -71,7 +71,7 @@ describe('course types routes', () => {
 
   describe('error path', () => {
     it('POST /api/v1/course-types returns 400 AppError format', async () => {
-      const error = new AppError(400, 'VALIDATION_ERROR', 'Invalid payload', [
+      const error = new AppError(400, 'VALIDATION_ERROR', 'Dati non validi', [
         { field: 'name' },
       ])
       sinon.stub(courseTypesService, 'createCourseType').rejects(error)
@@ -84,7 +84,7 @@ describe('course types routes', () => {
       expect(res.body).to.deep.equal({
         error: {
           code: 'VALIDATION_ERROR',
-          message: 'Invalid payload',
+          message: 'Dati non validi',
           details: [{ field: 'name' }],
         },
       })
@@ -94,7 +94,7 @@ describe('course types routes', () => {
       const error = new AppError(
         409,
         'DUPLICATE_RESOURCE',
-        'Course type name already exists',
+        'Tipologia di corso gia esistente',
         [{ field: 'name' }],
       )
       sinon.stub(courseTypesService, 'createCourseType').rejects(error)
@@ -107,16 +107,19 @@ describe('course types routes', () => {
       expect(res.body).to.deep.equal({
         error: {
           code: 'DUPLICATE_RESOURCE',
-          message: 'Course type name already exists',
+          message: 'Tipologia di corso gia esistente',
           details: [{ field: 'name' }],
         },
       })
     })
 
     it('PATCH /api/v1/course-types/1 returns 404 AppError format', async () => {
-      const error = new AppError(404, 'NOT_FOUND', 'Course type not found', [
-        { id: 1 },
-      ])
+      const error = new AppError(
+        404,
+        'NOT_FOUND',
+        'Tipologia di corso non trovata',
+        [{ id: 1 }],
+      )
       sinon.stub(courseTypesService, 'updateCourseType').rejects(error)
 
       const res = await request(app)
@@ -127,7 +130,7 @@ describe('course types routes', () => {
       expect(res.body).to.deep.equal({
         error: {
           code: 'NOT_FOUND',
-          message: 'Course type not found',
+          message: 'Tipologia di corso non trovata',
           details: [{ id: 1 }],
         },
       })

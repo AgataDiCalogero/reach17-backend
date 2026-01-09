@@ -14,12 +14,37 @@ npm install
 cp .env.example .env
 ```
 
+## Configurazione (.env)
+
 Compila `.env` con le credenziali del database e, in produzione, `CORS_ORIGIN`.
+
+Variabili principali:
+
+- `PORT` (opzionale, default `3000`)
+- `CORS_ORIGIN` (solo produzione; lista separata da virgola)
+- `TIDB_HOST`
+- `TIDB_PORT` (default `4000`)
+- `TIDB_USER`
+- `TIDB_PASSWORD`
+- `TIDB_DATABASE`
+- `TIDB_ENABLE_SSL` (`true`/`false`)
 
 ## Verifica database
 
 ```bash
 npm run db:smoke
+```
+
+## Test
+
+```bash
+npm test
+```
+
+Test di integrazione su DB reale (richiede `.env` configurato):
+
+```bash
+npm run test:integration
 ```
 
 ## Avvio
@@ -43,4 +68,5 @@ npm run dev
 
 ## Swagger
 
-- Quando aggiunto, Swagger sara disponibile all'endpoint configurato (es. `/api-docs`).
+- Endpoint previsto: `/api-docs`.
+- Al momento non e attivo: verra aggiunto con la documentazione OpenAPI.

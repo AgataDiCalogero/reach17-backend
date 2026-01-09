@@ -32,6 +32,20 @@ describe('course types service', () => {
     })
   })
 
+  it('createCourseType returns created record and trims name', async () => {
+    const created = { id: 1, name: 'Frontend' }
+    const createStub = sinon
+      .stub(courseTypesRepository, 'create')
+      .resolves(created)
+
+    const result = await courseTypesService.createCourseType({
+      name: '  Frontend  ',
+    })
+
+    expect(result).to.equal(created)
+    expect(createStub.calledOnceWithExactly('Frontend')).to.equal(true)
+  })
+
   it('createCourseType maps duplicate error to 409', async () => {
     sinon
       .stub(courseTypesRepository, 'create')
@@ -54,24 +68,49 @@ describe('course types service', () => {
   })
 
   it('updateCourseType returns 404 when repo returns null', async () => {
-    sinon.stub(courseTypesRepository, 'updateById').resolves(null)
+    const updateStub = sinon
+      .stub(courseTypesRepository, 'updateById')
+      .resolves(null)
 
     await expectAppError(
-      courseTypesService.updateCourseType(1, { name: 'X' }),
+      courseTypesService.updateCourseType('1', { name: ' X ' }),
       {
         status: 404,
         code: 'NOT_FOUND',
       },
     )
+    expect(updateStub.calledOnceWithExactly(1, 'X')).to.equal(true)
+  })
+
+  it('listCourseTypes returns list from repository', async () => {
+    const list = [
+      {
+        id: 1,
+        name: 'Backend',
+        created_at: '2024-01-01T10:00:00.000Z',
+        updated_at: '2024-01-01T10:00:00.000Z',
+      },
+    ]
+    const findAllStub = sinon
+      .stub(courseTypesRepository, 'findAll')
+      .resolves(list)
+
+    const result = await courseTypesService.listCourseTypes()
+
+    expect(result).to.equal(list)
+    expect(findAllStub.calledOnce).to.equal(true)
   })
 
   it('deleteCourseType returns 404 when repo returns false', async () => {
-    sinon.stub(courseTypesRepository, 'deleteById').resolves(false)
+    const deleteStub = sinon
+      .stub(courseTypesRepository, 'deleteById')
+      .resolves(false)
 
-    await expectAppError(courseTypesService.deleteCourseType(1), {
+    await expectAppError(courseTypesService.deleteCourseType('2'), {
       status: 404,
       code: 'NOT_FOUND',
     })
+    expect(deleteStub.calledOnceWithExactly(2)).to.equal(true)
   })
 
   it('deleteCourseType maps FK restrict to 409', async () => {

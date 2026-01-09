@@ -4,7 +4,7 @@ const courseTypesRepository = require('../repositories/courseTypes.repository')
 function toPositiveInt(id) {
   const numericId = Number(id)
   if (!Number.isInteger(numericId) || numericId <= 0) {
-    throw new AppError(400, 'VALIDATION_ERROR', 'Invalid id', [{ id }])
+    throw new AppError(400, 'VALIDATION_ERROR', 'ID non valido', [{ id }])
   }
   return numericId
 }
@@ -12,7 +12,7 @@ function toPositiveInt(id) {
 function normalizeName(name, { required }) {
   if (name == null) {
     if (required) {
-      throw new AppError(400, 'VALIDATION_ERROR', 'Name is required', [
+      throw new AppError(400, 'VALIDATION_ERROR', 'Il nome e obbligatorio', [
         { field: 'name' },
       ])
     }
@@ -20,14 +20,14 @@ function normalizeName(name, { required }) {
   }
 
   if (typeof name !== 'string') {
-    throw new AppError(400, 'VALIDATION_ERROR', 'Invalid name', [
+    throw new AppError(400, 'VALIDATION_ERROR', 'Nome non valido', [
       { field: 'name' },
     ])
   }
 
   const trimmed = name.trim()
   if (!trimmed) {
-    throw new AppError(400, 'VALIDATION_ERROR', 'Invalid name', [
+    throw new AppError(400, 'VALIDATION_ERROR', 'Nome non valido', [
       { field: 'name' },
     ])
   }
@@ -47,7 +47,7 @@ function throwDuplicateName() {
   throw new AppError(
     409,
     'DUPLICATE_RESOURCE',
-    'Course type name already exists',
+    'Tipologia di corso gia esistente',
     [{ field: 'name' }],
   )
 }
@@ -75,7 +75,7 @@ async function updateCourseType(id, { name }) {
     throw new AppError(
       400,
       'VALIDATION_ERROR',
-      'At least one field must be provided',
+      'E necessario fornire almeno un campo',
       [{ field: 'name' }],
     )
   }
@@ -86,7 +86,7 @@ async function updateCourseType(id, { name }) {
       normalizedName,
     )
     if (!updated) {
-      throw new AppError(404, 'NOT_FOUND', 'Course type not found', [
+      throw new AppError(404, 'NOT_FOUND', 'Tipologia di corso non trovata', [
         { id: numericId },
       ])
     }
@@ -104,13 +104,13 @@ async function deleteCourseType(id) {
   try {
     const deleted = await courseTypesRepository.deleteById(numericId)
     if (!deleted) {
-      throw new AppError(404, 'NOT_FOUND', 'Course type not found', [
+      throw new AppError(404, 'NOT_FOUND', 'Tipologia di corso non trovata', [
         { id: numericId },
       ])
     }
   } catch (err) {
     if (isFkRestrictError(err)) {
-      throw new AppError(409, 'CONFLICT', 'Course type is in use', [
+      throw new AppError(409, 'CONFLICT', 'Tipologia di corso in uso', [
         { id: numericId },
       ])
     }
