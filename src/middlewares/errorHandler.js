@@ -1,15 +1,15 @@
-const AppError = require("../errors/AppError");
+const AppError = require('../errors/AppError')
 
-function errorHandler(err, req, res, next) {
+function errorHandler(err, _req, res, next) {
   if (res.headersSent) {
-    return next(err);
+    return next(err)
   }
 
-  const isAppError = err instanceof AppError;
-  const status = isAppError ? err.status : 500;
-  const code = isAppError ? err.code : "INTERNAL_ERROR";
-  const message = isAppError ? err.message : "Errore interno del server";
-  const details = isAppError ? err.details : [];
+  const isAppError = err instanceof AppError
+  const status = isAppError ? err.status : 500
+  const code = isAppError ? err.code : 'INTERNAL_ERROR'
+  const message = isAppError ? err.message : 'Errore interno del server'
+  const details = isAppError ? err.details : []
 
   res.status(status).json({
     error: {
@@ -17,7 +17,7 @@ function errorHandler(err, req, res, next) {
       message,
       details,
     },
-  });
+  })
 }
 
-module.exports = errorHandler;
+module.exports = errorHandler

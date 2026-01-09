@@ -38,12 +38,12 @@ Esempio:
 ### 1.1 Creare una tipologia di corso
 
 - Metodo + Path: `POST /api/v1/course-types`
-- Query params: none
-- Request body:
+- Parametri query: nessuno
+- Body richiesta:
   - `name` (string, required, trimmed)
-- Response:
+- Risposta:
   - `201`
-  - Body: `{ "id": number, "name": string, "created_at": string, "updated_at": string }`
+  - Corpo: `{ "id": number, "name": string, "created_at": string, "updated_at": string }`
 - Errori:
   - `400` `VALIDATION_ERROR` (nome mancante/vuoto)
   - `409` `DUPLICATE_RESOURCE` (nome già esistente)
@@ -51,20 +51,20 @@ Esempio:
 ### 1.2 Lista tipologie di corso
 
 - Metodo + Path: `GET /api/v1/course-types`
-- Query params: none
-- Response:
+- Parametri query: nessuno
+- Risposta:
   - `200`
-  - Body: `[{ id, name, created_at, updated_at }]`
+  - Corpo: `[{ id, name, created_at, updated_at }]`
 
 ### 1.3 Aggiornare una tipologia di corso
 
 - Metodo + Path: `PATCH /api/v1/course-types/:id`
-- Query params: none
-- Request body (at least one):
+- Parametri query: nessuno
+- Body richiesta (almeno uno):
   - `name` (string)
-- Response:
+- Risposta:
   - `200`
-  - Body: `{ id, name, created_at, updated_at }`
+  - Corpo: `{ id, name, created_at, updated_at }`
 - Errori:
   - `400` `VALIDATION_ERROR`
   - `404` `NOT_FOUND`
@@ -73,8 +73,8 @@ Esempio:
 ### 1.4 Eliminare una tipologia di corso
 
 - Metodo + Path: `DELETE /api/v1/course-types/:id`
-- Query params: none
-- Response:
+- Parametri query: nessuno
+- Risposta:
   - `204`
 - Errori:
   - `404` `NOT_FOUND`
@@ -87,12 +87,12 @@ Esempio:
 ### 2.1 Creare un ateneo
 
 - Metodo + Path: `POST /api/v1/universities`
-- Query params: none
-- Request body:
+- Parametri query: nessuno
+- Body richiesta:
   - `name` (string, required, unique)
-- Response:
+- Risposta:
   - `201`
-  - Body: `{ id, name, created_at, updated_at }`
+  - Corpo: `{ id, name, created_at, updated_at }`
 - Errori:
   - `400` `VALIDATION_ERROR`
   - `409` `DUPLICATE_RESOURCE`
@@ -100,20 +100,20 @@ Esempio:
 ### 2.2 Lista atenei
 
 - Metodo + Path: `GET /api/v1/universities`
-- Query params: none
-- Response:
+- Parametri query: nessuno
+- Risposta:
   - `200`
-  - Body: `[{ id, name, created_at, updated_at }]`
+  - Corpo: `[{ id, name, created_at, updated_at }]`
 
 ### 2.3 Aggiornare un ateneo
 
 - Metodo + Path: `PATCH /api/v1/universities/:id`
-- Query params: none
-- Request body:
+- Parametri query: nessuno
+- Body richiesta:
   - `name` (string)
-- Response:
+- Risposta:
   - `200`
-  - Body: `{ id, name, created_at, updated_at }`
+  - Corpo: `{ id, name, created_at, updated_at }`
 - Errori:
   - `400` `VALIDATION_ERROR`
   - `404` `NOT_FOUND`
@@ -122,8 +122,8 @@ Esempio:
 ### 2.4 Eliminare un ateneo
 
 - Metodo + Path: `DELETE /api/v1/universities/:id`
-- Query params: none
-- Response:
+- Parametri query: nessuno
+- Risposta:
   - `204`
 - Errori:
   - `404` `NOT_FOUND`
@@ -136,14 +136,14 @@ Esempio:
 ### 3.1 Creare un corso
 
 - Metodo + Path: `POST /api/v1/courses`
-- Query params: none
-- Request body:
+- Parametri query: nessuno
+- Body richiesta:
   - `name` (string, required)
   - `course_type_id` (number, required, FK)
 - Unicita: `name` e unico per `course_type_id` (composito)
-- Response:
+- Risposta:
   - `201`
-  - Body: `{ id, name, course_type_id, created_at, updated_at }`
+  - Corpo: `{ id, name, course_type_id, created_at, updated_at }`
 - Errori:
   - `400` `VALIDATION_ERROR`
   - `404` `COURSE_TYPE_NOT_FOUND`
@@ -151,27 +151,27 @@ Esempio:
 ### 3.2 Lista corsi (con atenei + filtri)
 
 - Metodo + Path: `GET /api/v1/courses`
-- Query params (optional):
+- Parametri query (opzionali):
   - `name` (string, partial match)
   - `course_type` (string, match su `course_types.name`)
   - `course_type_id` (number, optional extra)
 - Se presenti entrambi, `course_type_id` ha precedenza su `course_type`.
-- Response:
+- Risposta:
   - `200`
-  - Body: `[{ id, name, course_type: { id, name }, universities: [{ id, name }] }]`
+  - Corpo: `[{ id, name, course_type: { id, name }, universities: [{ id, name }] }]`
 - Errori:
   - `400` `VALIDATION_ERROR` (parametri query non validi)
 
 ### 3.3 Aggiornare un corso
 
 - Metodo + Path: `PATCH /api/v1/courses/:id`
-- Query params: none
-- Request body (at least one):
+- Parametri query: nessuno
+- Body richiesta (almeno uno):
   - `name` (string)
   - `course_type_id` (number)
-- Response:
+- Risposta:
   - `200`
-  - Body: `{ id, name, course_type_id, created_at, updated_at }`
+  - Corpo: `{ id, name, course_type_id, created_at, updated_at }`
 - Errori:
   - `400` `VALIDATION_ERROR`
   - `404` `COURSE_NOT_FOUND`
@@ -180,8 +180,8 @@ Esempio:
 ### 3.4 Eliminare un corso
 
 - Metodo + Path: `DELETE /api/v1/courses/:id`
-- Query params: none
-- Response:
+- Parametri query: nessuno
+- Risposta:
   - `204`
 - Errori:
   - `404` `COURSE_NOT_FOUND`
@@ -195,11 +195,11 @@ Nota: la delete deve gestire le associazioni nella join table (DB constraint, ca
 ### 4.1 Creare un'associazione
 
 - Metodo + Path: `POST /api/v1/courses/:courseId/universities/:universityId`
-- Query params: none
-- Request body: none
-- Response:
+- Parametri query: nessuno
+- Body richiesta: nessuno
+- Risposta:
   - `201`
-  - Body: `{ course_id, university_id }`
+  - Corpo: `{ course_id, university_id }`
 - Errori:
   - `404` `COURSE_NOT_FOUND`
   - `404` `UNIVERSITY_NOT_FOUND`
@@ -208,8 +208,8 @@ Nota: la delete deve gestire le associazioni nella join table (DB constraint, ca
 ### 4.2 Eliminare un'associazione
 
 - Metodo + Path: `DELETE /api/v1/courses/:courseId/universities/:universityId`
-- Query params: none
-- Response:
+- Parametri query: nessuno
+- Risposta:
   - `204`
 - Errori:
   - `404` `ASSOCIATION_NOT_FOUND`
