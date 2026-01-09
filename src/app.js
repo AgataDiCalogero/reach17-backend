@@ -5,6 +5,7 @@ const morgan = require('morgan')
 const healthRouter = require('./routes/health.routes')
 const courseTypesRouter = require('./routes/courseTypes.routes')
 const universitiesRouter = require('./routes/universities.routes')
+const coursesRouter = require('./routes/courses.routes')
 const notFound = require('./middlewares/notFound')
 const errorHandler = require('./middlewares/errorHandler')
 
@@ -18,12 +19,13 @@ app.disable('x-powered-by')
 app.use(express.json({ limit: '1mb' }))
 app.use(helmet())
 if (process.env.NODE_ENV === 'production') {
-  const allowedOrigins = corsOrigin
-    ? corsOrigin
-        .split(',')
-        .map((origin) => origin.trim())
-        .filter(Boolean)
-    : []
+  let allowedOrigins = []
+  if (corsOrigin) {
+    allowedOrigins = corsOrigin
+      .split(',')
+      .map((origin) => origin.trim())
+      .filter(Boolean)
+  }
   app.use(
     cors({
       origin: allowedOrigins.length > 0 ? allowedOrigins : false,
@@ -40,6 +42,7 @@ if (process.env.NODE_ENV !== 'production') {
 app.use('/health', healthRouter)
 app.use('/api/v1/course-types', courseTypesRouter)
 app.use('/api/v1/universities', universitiesRouter)
+app.use('/api/v1/courses', coursesRouter)
 
 // Not Found
 app.use(notFound)

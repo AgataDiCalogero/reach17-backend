@@ -6,7 +6,6 @@ const describeIf = shouldRun ? describe : () => {}
 
 describeIf('course types integration', () => {
   let app
-  let pool
   let createdId = null
 
   before(() => {
@@ -25,7 +24,6 @@ describeIf('course types integration', () => {
       )
     }
     app = require('../../src/app')
-    pool = require('../../src/db/pool')
   })
 
   afterEach(async () => {
@@ -35,12 +33,6 @@ describeIf('course types integration', () => {
       } finally {
         createdId = null
       }
-    }
-  })
-
-  after(async () => {
-    if (pool && typeof pool.end === 'function') {
-      await pool.end()
     }
   })
 

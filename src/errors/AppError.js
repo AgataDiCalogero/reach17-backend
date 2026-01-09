@@ -9,11 +9,13 @@ class AppError extends Error {
     this.name = 'AppError'
     this.status = Number.isInteger(status) ? status : 500
     this.code = typeof code === 'string' && code ? code : 'INTERNAL_ERROR'
-    this.details = Array.isArray(details)
-      ? details
-      : details == null
-        ? []
-        : [details]
+    if (Array.isArray(details)) {
+      this.details = details
+    } else if (details == null) {
+      this.details = []
+    } else {
+      this.details = [details]
+    }
 
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, AppError)
