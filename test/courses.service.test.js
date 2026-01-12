@@ -81,4 +81,114 @@ describe('courses service', () => {
       code: 'CONFLICT',
     })
   })
+
+  it('listCourses forwards name filter and groups universities', async () => {
+    const baseRows = [
+      {
+        id: 1,
+        name: 'Data Science',
+        course_type_id: 2,
+        course_type_name: 'Master',
+      },
+      {
+        id: 2,
+        name: 'Economia',
+        course_type_id: 3,
+        course_type_name: 'Laurea Magistrale',
+      },
+    ]
+    const findAllStub = sinon
+      .stub(coursesRepository, 'findAllBase')
+      .resolves(baseRows)
+    const associationsStub = sinon
+      .stub(courseUniversitiesRepository, 'listUniversitiesByCourseIds')
+      .resolves([
+        {
+          course_id: 1,
+          university_id: 10,
+          university_name: 'Uni A',
+        },
+        {
+          course_id: 1,
+          university_id: 11,
+          university_name: 'Uni B',
+        },
+        {
+          course_id: 2,
+          university_id: 12,
+          university_name: 'Uni C',
+        },
+      ])
+
+    const result = await coursesService.listCourses({ name: '  Data  ' })
+
+    expect(
+      findAllStub.calledOnceWithExactly({
+        name: 'Data',
+        course_type: null,
+        course_type_id: null,
+      }),
+    ).to.equal(true)
+    expect(associationsStub.calledOnceWithExactly([1, 2])).to.equal(true)
+    expect(result).to.deep.equal([
+      {
+        id: 1,
+        name: 'Data Science',
+        course_type: { id: 2, name: 'Master' },
+        universities: [
+          { id: 10, name: 'Uni A' },
+          { id: 11, name: 'Uni B' },
+        ],
+      },
+      {
+        id: 2,
+        name: 'Economia',
+        course_type: { id: 3, name: 'Laurea Magistrale' },
+        universities: [{ id: 12, name: 'Uni C' }],
+      },
+    ])
+  })
+
+  it('listCourses forwards course_type filter', async () => {
+    const findAllStub = sinon
+      .stub(coursesRepository, 'findAllBase')
+      .resolves([])
+    const associationsStub = sinon
+      .stub(courseUniversitiesRepository, 'listUniversitiesByCourseIds')
+      .resolves([])
+
+    const result = await coursesService.listCourses({ course_type: ' Master ' })
+
+    expect(
+      findAllStub.calledOnceWithExactly({
+        name: null,
+        course_type: 'Master',
+        course_type_id: null,
+      }),
+    ).to.equal(true)
+    expect(associationsStub.calledOnceWithExactly([])).to.equal(true)
+    expect(result).to.deep.equal([])
+  })
+
+  it('listCourses forwards name and course_type filters together', async () => {
+    const findAllStub = sinon
+      .stub(coursesRepository, 'findAllBase')
+      .resolves([])
+    sinon
+      .stub(courseUniversitiesRepository, 'listUniversitiesByCourseIds')
+      .resolves([])
+
+    await coursesService.listCourses({
+      name: 'Eco',
+      course_type: 'Laurea Magistrale',
+    })
+
+    expect(
+      findAllStub.calledOnceWithExactly({
+        name: 'Eco',
+        course_type: 'Laurea Magistrale',
+        course_type_id: null,
+      }),
+    ).to.equal(true)
+  })
 })

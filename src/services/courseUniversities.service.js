@@ -2,7 +2,7 @@ const AppError = require('../errors/AppError')
 const coursesRepository = require('../repositories/courses.repository')
 const universitiesRepository = require('../repositories/universities.repository')
 const courseUniversitiesRepository = require('../repositories/courseUniversities.repository')
-const { isDuplicateError } = require('../db/dbErrors')
+const { isDuplicateError, isFkNotFoundError } = require('../db/dbErrors')
 const { toPositiveInt } = require('../validators/common.validators')
 
 function toCourseId(id) {
@@ -38,7 +38,7 @@ async function ensureUniversityExists(universityId) {
 }
 
 function throwDuplicateAssociation(courseId, universityId) {
-  throw new AppError(409, 'DUPLICATE_RESOURCE', 'Associazione già esistente', [
+  throw new AppError(409, 'DUPLICATE_RESOURCE', "Associazione gia' esistente", [
     { field: 'course_id', value: courseId },
     { field: 'university_id', value: universityId },
   ])
@@ -59,6 +59,10 @@ async function createAssociation(courseId, universityId) {
   } catch (err) {
     if (isDuplicateError(err)) {
       throwDuplicateAssociation(numericCourseId, numericUniversityId)
+    }
+    if (isFkNotFoundError(err)) {
+      await ensureCourseExists(numericCourseId)
+      await ensureUniversityExists(numericUniversityId)
     }
     throw err
   }

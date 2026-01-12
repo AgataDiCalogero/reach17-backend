@@ -54,7 +54,7 @@ function normalizeName(
   {
     required = false,
     fieldName = 'name',
-    requiredMessage = 'Il nome è obbligatorio',
+    requiredMessage = "Il nome e' obbligatorio",
     invalidMessage = 'Nome non valido',
     details,
   } = {},
@@ -107,7 +107,7 @@ function isProvidedValue(value) {
 function requireAtLeastOneField(
   payload,
   fieldsArray,
-  { message = 'È necessario fornire almeno un campo', details } = {},
+  { message = "E' necessario fornire almeno un campo", details } = {},
 ) {
   const fields = Array.isArray(fieldsArray) ? fieldsArray : []
   const hasValue = fields.some((field) =>

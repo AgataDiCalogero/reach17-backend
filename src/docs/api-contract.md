@@ -18,7 +18,7 @@ Esempio:
 {
   "error": {
     "code": "DUPLICATE_RESOURCE",
-    "message": "Tipologia di corso già esistente",
+    "message": "Tipologia di corso gia' esistente",
     "details": []
   }
 }
@@ -46,7 +46,7 @@ Esempio:
   - Corpo: `{ "id": number, "name": string, "created_at": string, "updated_at": string }`
 - Errori:
   - `400` `VALIDATION_ERROR` (nome mancante/vuoto)
-  - `409` `DUPLICATE_RESOURCE` (nome già esistente)
+  - `409` `DUPLICATE_RESOURCE` (nome gia' esistente)
 
 ### 1.2 Lista tipologie di corso
 

@@ -47,6 +47,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 // Routes
 app.use('/health', healthRouter)
+app.use('/api/v1/health', healthRouter)
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openApiDocument))
 app.get('/openapi', (_req, res) => {
   res.type('text/yaml').send(openApiYaml)

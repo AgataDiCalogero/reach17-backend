@@ -26,6 +26,20 @@ describe('course universities service', () => {
     sinon.restore()
   })
 
+  it('createAssociation returns association when entities exist', async () => {
+    const association = { course_id: 1, university_id: 2 }
+    sinon.stub(coursesRepository, 'findById').resolves({ id: 1 })
+    sinon.stub(universitiesRepository, 'findById').resolves({ id: 2 })
+    const createStub = sinon
+      .stub(courseUniversitiesRepository, 'createAssociation')
+      .resolves(association)
+
+    const result = await courseUniversitiesService.createAssociation(1, 2)
+
+    expect(result).to.deep.equal(association)
+    expect(createStub.calledOnceWithExactly(1, 2)).to.equal(true)
+  })
+
   it('createAssociation returns 404 when course is missing', async () => {
     sinon.stub(coursesRepository, 'findById').resolves(null)
 

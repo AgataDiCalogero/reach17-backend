@@ -32,7 +32,7 @@ function normalizeCourseName(name, { required }) {
   return normalizeName(name, {
     required,
     fieldName: 'name',
-    requiredMessage: 'Il nome è obbligatorio',
+    requiredMessage: "Il nome e' obbligatorio",
     invalidMessage: 'Nome non valido',
   })
 }
@@ -58,7 +58,7 @@ async function ensureCourseTypeExists(courseTypeId) {
 }
 
 function throwDuplicateCourse() {
-  throw new AppError(409, 'DUPLICATE_RESOURCE', 'Corso già esistente', [
+  throw new AppError(409, 'DUPLICATE_RESOURCE', "Corso gia' esistente", [
     { field: 'name' },
   ])
 }
@@ -134,7 +134,7 @@ async function updateCourse(id, { name, course_type_id }) {
   requireAtLeastOneField(
     { name: normalizedName, course_type_id: numericCourseTypeId },
     ['name', 'course_type_id'],
-    { message: 'È necessario fornire almeno un campo' },
+    { message: "E' necessario fornire almeno un campo" },
   )
 
   if (numericCourseTypeId != null) {

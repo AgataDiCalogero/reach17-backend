@@ -5,6 +5,21 @@ info:
 servers:
   - url: /api/v1
 paths:
+  /health:
+    get:
+      summary: Verifica stato
+      responses:
+        '200':
+          description: Servizio operativo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                required:
+                  - status
   /course-types:
     get:
       summary: Lista tipologie di corso
@@ -280,18 +295,193 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            invalid_id:
+              summary: ID non valido
+              value:
+                error:
+                  code: VALIDATION_ERROR
+                  message: ID non valido
+                  details:
+                    - field: id
+                      value: abc
+            missing_name:
+              summary: Nome obbligatorio
+              value:
+                error:
+                  code: VALIDATION_ERROR
+                  message: Il nome e' obbligatorio
+                  details:
+                    - field: name
+                      value: null
+            invalid_name:
+              summary: Nome non valido
+              value:
+                error:
+                  code: VALIDATION_ERROR
+                  message: Nome non valido
+                  details:
+                    - field: name
+                      value: ''
+            invalid_course_type:
+              summary: Tipologia di corso non valida
+              value:
+                error:
+                  code: VALIDATION_ERROR
+                  message: Tipologia di corso non valida
+                  details:
+                    - field: course_type
+                      value: 123
+            missing_fields:
+              summary: Almeno un campo
+              value:
+                error:
+                  code: VALIDATION_ERROR
+                  message: E' necessario fornire almeno un campo
+                  details:
+                    - field:
+                        - name
+                        - course_type_id
+                      value: null
     NotFound:
       description: Risorsa non trovata
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            course_type:
+              summary: Tipologia di corso non trovata
+              value:
+                error:
+                  code: NOT_FOUND
+                  message: Tipologia di corso non trovata
+                  details:
+                    - id: 10
+            university:
+              summary: Ateneo non trovato
+              value:
+                error:
+                  code: NOT_FOUND
+                  message: Ateneo non trovato
+                  details:
+                    - field: id
+                      value: 3
+            course:
+              summary: Corso non trovato
+              value:
+                error:
+                  code: COURSE_NOT_FOUND
+                  message: Corso non trovato
+                  details:
+                    - field: id
+                      value: 7
+            course_type_id:
+              summary: Tipologia di corso non trovata (course_type_id)
+              value:
+                error:
+                  code: COURSE_TYPE_NOT_FOUND
+                  message: Tipologia di corso non trovata
+                  details:
+                    - field: course_type_id
+                      value: 2
+            university_id:
+              summary: Ateneo non trovato (university_id)
+              value:
+                error:
+                  code: UNIVERSITY_NOT_FOUND
+                  message: Ateneo non trovato
+                  details:
+                    - field: university_id
+                      value: 5
+            association:
+              summary: Associazione non trovata
+              value:
+                error:
+                  code: ASSOCIATION_NOT_FOUND
+                  message: Associazione non trovata
+                  details:
+                    - field: course_id
+                      value: 1
+                    - field: university_id
+                      value: 2
+            route:
+              summary: Risorsa non trovata (path)
+              value:
+                error:
+                  code: NOT_FOUND
+                  message: Risorsa non trovata
+                  details:
+                    - path: /api/v1/unknown
+                      method: GET
     Conflict:
       description: Conflitto
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            duplicate_course_type:
+              summary: Tipologia di corso gia' esistente
+              value:
+                error:
+                  code: DUPLICATE_RESOURCE
+                  message: Tipologia di corso gia' esistente
+                  details:
+                    - field: name
+            duplicate_university:
+              summary: Ateneo gia' esistente
+              value:
+                error:
+                  code: DUPLICATE_RESOURCE
+                  message: Ateneo gia' esistente
+                  details:
+                    - field: name
+            duplicate_course:
+              summary: Corso gia' esistente
+              value:
+                error:
+                  code: DUPLICATE_RESOURCE
+                  message: Corso gia' esistente
+                  details:
+                    - field: name
+            duplicate_association:
+              summary: Associazione gia' esistente
+              value:
+                error:
+                  code: DUPLICATE_RESOURCE
+                  message: Associazione gia' esistente
+                  details:
+                    - field: course_id
+                      value: 1
+                    - field: university_id
+                      value: 2
+            course_type_in_use:
+              summary: Tipologia di corso in uso
+              value:
+                error:
+                  code: CONFLICT
+                  message: Tipologia di corso in uso
+                  details:
+                    - id: 4
+            university_in_use:
+              summary: Ateneo in uso
+              value:
+                error:
+                  code: CONFLICT
+                  message: Ateneo in uso
+                  details:
+                    - field: id
+                      value: 3
+            course_in_use:
+              summary: Corso in uso
+              value:
+                error:
+                  code: CONFLICT
+                  message: Corso in uso
+                  details:
+                    - field: id
+                      value: 8
   schemas:
     CourseType:
       type: object

@@ -70,7 +70,7 @@ describe('course types routes', () => {
 
   describe('error path', () => {
     it('POST /api/v1/course-types returns 400 AppError format', async () => {
-      const error = new AppError(400, 'VALIDATION_ERROR', 'Dati non validi', [
+      const error = new AppError(400, 'VALIDATION_ERROR', 'Nome non valido', [
         { field: 'name' },
       ])
       sinon.stub(courseTypesService, 'createCourseType').rejects(error)
@@ -83,7 +83,7 @@ describe('course types routes', () => {
       expect(res.body).to.deep.equal({
         error: {
           code: 'VALIDATION_ERROR',
-          message: 'Dati non validi',
+          message: 'Nome non valido',
           details: [{ field: 'name' }],
         },
       })
@@ -93,7 +93,7 @@ describe('course types routes', () => {
       const error = new AppError(
         409,
         'DUPLICATE_RESOURCE',
-        'Tipologia di corso già esistente',
+        "Tipologia di corso gia' esistente",
         [{ field: 'name' }],
       )
       sinon.stub(courseTypesService, 'createCourseType').rejects(error)
@@ -106,7 +106,7 @@ describe('course types routes', () => {
       expect(res.body).to.deep.equal({
         error: {
           code: 'DUPLICATE_RESOURCE',
-          message: 'Tipologia di corso già esistente',
+          message: "Tipologia di corso gia' esistente",
           details: [{ field: 'name' }],
         },
       })

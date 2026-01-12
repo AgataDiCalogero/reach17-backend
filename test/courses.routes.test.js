@@ -103,7 +103,7 @@ describe('courses routes', () => {
 
   describe('error path', () => {
     it('POST /api/v1/courses returns 400 AppError format', async () => {
-      const error = new AppError(400, 'VALIDATION_ERROR', 'Dati non validi', [
+      const error = new AppError(400, 'VALIDATION_ERROR', 'Nome non valido', [
         { field: 'name' },
       ])
       sinon.stub(coursesService, 'createCourse').rejects(error)
@@ -114,7 +114,7 @@ describe('courses routes', () => {
       expect(res.body).to.deep.equal({
         error: {
           code: 'VALIDATION_ERROR',
-          message: 'Dati non validi',
+          message: 'Nome non valido',
           details: [{ field: 'name' }],
         },
       })
@@ -157,6 +157,33 @@ describe('courses routes', () => {
           code: 'UNIVERSITY_NOT_FOUND',
           message: 'Ateneo non trovato',
           details: [{ field: 'university_id', value: 2 }],
+        },
+      })
+    })
+
+    it('DELETE /api/v1/courses/1/universities/2 returns 404 AppError format', async () => {
+      const error = new AppError(
+        404,
+        'ASSOCIATION_NOT_FOUND',
+        'Associazione non trovata',
+        [
+          { field: 'course_id', value: 1 },
+          { field: 'university_id', value: 2 },
+        ],
+      )
+      sinon.stub(courseUniversitiesService, 'deleteAssociation').rejects(error)
+
+      const res = await request(app).delete('/api/v1/courses/1/universities/2')
+
+      expect(res.status).to.equal(404)
+      expect(res.body).to.deep.equal({
+        error: {
+          code: 'ASSOCIATION_NOT_FOUND',
+          message: 'Associazione non trovata',
+          details: [
+            { field: 'course_id', value: 1 },
+            { field: 'university_id', value: 2 },
+          ],
         },
       })
     })

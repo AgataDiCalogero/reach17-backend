@@ -39,7 +39,24 @@ npm run db:smoke
 ## Migrazioni
 
 Lo schema e disponibile in `migrations.sql`. Esegui le migrazioni con il client
-MySQL compatibile (es. TiDB Cloud) secondo il tuo ambiente.
+MySQL compatibile (es. TiDB Cloud) secondo il tuo ambiente oppure:
+
+```bash
+npm run db:migrate
+```
+
+Lo script usa le credenziali presenti in `.env`.
+
+## Dati demo (seed)
+
+Il file `seed.sql` inserisce dati di esempio per tipologie, atenei, corsi e
+associazioni. Esegui il seed con:
+
+```bash
+npm run db:seed
+```
+
+Lo script e' idempotente: se lanciato piu' volte non duplica i record.
 
 ## Test
 
@@ -78,7 +95,8 @@ npm run dev
 
 - Importa il repository in Vercel.
 - Imposta Node 20 e le variabili d'ambiente (stesse di `.env`).
-- Configura `CORS_ORIGIN` con il dominio del front-end.
+- Configura `CORS_ORIGIN` con il dominio del front-end (se vuoto, in produzione
+  nessun origin viene autorizzato).
 - Se usi funzioni serverless, valuta un adapter Express o un `vercel.json` dedicato.
 
 ## Swagger

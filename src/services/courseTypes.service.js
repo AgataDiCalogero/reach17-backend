@@ -18,7 +18,7 @@ function normalizeCourseTypeName(name, { required }) {
   return normalizeName(name, {
     required,
     fieldName: 'name',
-    requiredMessage: 'Il nome è obbligatorio',
+    requiredMessage: "Il nome e' obbligatorio",
     invalidMessage: 'Nome non valido',
   })
 }
@@ -27,7 +27,7 @@ function throwDuplicateName() {
   throw new AppError(
     409,
     'DUPLICATE_RESOURCE',
-    'Tipologia di corso già esistente',
+    "Tipologia di corso gia' esistente",
     [{ field: 'name' }],
   )
 }
@@ -52,7 +52,7 @@ async function updateCourseType(id, { name }) {
   const numericId = toCourseTypeId(id)
   const normalizedName = normalizeCourseTypeName(name, { required: false })
   requireAtLeastOneField({ name: normalizedName }, ['name'], {
-    message: 'È necessario fornire almeno un campo',
+    message: "E' necessario fornire almeno un campo",
   })
 
   try {

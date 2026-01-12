@@ -71,7 +71,7 @@ describe('universities routes', () => {
 
   describe('error path', () => {
     it('POST /api/v1/universities returns 400 AppError format', async () => {
-      const error = new AppError(400, 'VALIDATION_ERROR', 'Dati non validi', [
+      const error = new AppError(400, 'VALIDATION_ERROR', 'Nome non valido', [
         { field: 'name' },
       ])
       sinon.stub(universitiesService, 'createUniversity').rejects(error)
@@ -84,7 +84,7 @@ describe('universities routes', () => {
       expect(res.body).to.deep.equal({
         error: {
           code: 'VALIDATION_ERROR',
-          message: 'Dati non validi',
+          message: 'Nome non valido',
           details: [{ field: 'name' }],
         },
       })

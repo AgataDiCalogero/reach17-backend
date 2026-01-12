@@ -29,7 +29,14 @@ describeIf('course types integration', () => {
   afterEach(async () => {
     if (createdId != null) {
       try {
-        await request(app).delete(`/api/v1/course-types/${createdId}`)
+        const deleteRes = await request(app).delete(
+          `/api/v1/course-types/${createdId}`,
+        )
+        if (deleteRes.status !== 204 && deleteRes.status !== 404) {
+          console.warn(
+            `Cleanup warning: delete course type returned ${deleteRes.status}`,
+          )
+        }
       } finally {
         createdId = null
       }

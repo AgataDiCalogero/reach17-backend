@@ -29,7 +29,14 @@ describeIf('universities integration', () => {
   afterEach(async () => {
     if (createdId != null) {
       try {
-        await request(app).delete(`/api/v1/universities/${createdId}`)
+        const deleteRes = await request(app).delete(
+          `/api/v1/universities/${createdId}`,
+        )
+        if (deleteRes.status !== 204 && deleteRes.status !== 404) {
+          console.warn(
+            `Cleanup warning: delete university returned ${deleteRes.status}`,
+          )
+        }
       } finally {
         createdId = null
       }

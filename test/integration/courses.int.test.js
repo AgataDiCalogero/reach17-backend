@@ -30,18 +30,42 @@ describeIf('courses integration', () => {
 
   afterEach(async () => {
     if (courseId != null && universityId != null) {
-      await request(app).delete(
+      const deleteRes = await request(app).delete(
         `/api/v1/courses/${courseId}/universities/${universityId}`,
       )
+      if (deleteRes.status !== 204 && deleteRes.status !== 404) {
+        console.warn(
+          `Cleanup warning: delete course-university association returned ${deleteRes.status}`,
+        )
+      }
     }
     if (courseId != null) {
-      await request(app).delete(`/api/v1/courses/${courseId}`)
+      const deleteRes = await request(app).delete(`/api/v1/courses/${courseId}`)
+      if (deleteRes.status !== 204 && deleteRes.status !== 404) {
+        console.warn(
+          `Cleanup warning: delete course returned ${deleteRes.status}`,
+        )
+      }
     }
     if (universityId != null) {
-      await request(app).delete(`/api/v1/universities/${universityId}`)
+      const deleteRes = await request(app).delete(
+        `/api/v1/universities/${universityId}`,
+      )
+      if (deleteRes.status !== 204 && deleteRes.status !== 404) {
+        console.warn(
+          `Cleanup warning: delete university returned ${deleteRes.status}`,
+        )
+      }
     }
     if (courseTypeId != null) {
-      await request(app).delete(`/api/v1/course-types/${courseTypeId}`)
+      const deleteRes = await request(app).delete(
+        `/api/v1/course-types/${courseTypeId}`,
+      )
+      if (deleteRes.status !== 204 && deleteRes.status !== 404) {
+        console.warn(
+          `Cleanup warning: delete course type returned ${deleteRes.status}`,
+        )
+      }
     }
     courseTypeId = null
     universityId = null

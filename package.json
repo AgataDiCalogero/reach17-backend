@@ -9,6 +9,8 @@
     "test": "mocha",
     "test:integration": "cross-env RUN_INTEGRATION=true mocha \"test/integration/**/*.test.js\"",
     "db:smoke": "node scripts/db-smoke.js",
+    "db:migrate": "node scripts/db-run-sql.js migrations.sql",
+    "db:seed": "node scripts/db-run-sql.js seed.sql",
     "lint": "eslint .",
     "lint-staged": "lint-staged",
     "format": "prettier --write .",

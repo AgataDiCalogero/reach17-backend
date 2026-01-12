@@ -18,13 +18,13 @@ function normalizeUniversityName(name, { required }) {
   return normalizeName(name, {
     required,
     fieldName: 'name',
-    requiredMessage: 'Il nome è obbligatorio',
+    requiredMessage: "Il nome e' obbligatorio",
     invalidMessage: 'Nome non valido',
   })
 }
 
 function throwDuplicateName() {
-  throw new AppError(409, 'DUPLICATE_RESOURCE', 'Ateneo già esistente', [
+  throw new AppError(409, 'DUPLICATE_RESOURCE', "Ateneo gia' esistente", [
     { field: 'name' },
   ])
 }
@@ -49,7 +49,7 @@ async function updateUniversity(id, { name }) {
   const numericId = toUniversityId(id)
   const normalizedName = normalizeUniversityName(name, { required: false })
   requireAtLeastOneField({ name: normalizedName }, ['name'], {
-    message: 'È necessario fornire almeno un campo',
+    message: "E' necessario fornire almeno un campo",
   })
 
   try {
