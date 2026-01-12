@@ -79,7 +79,8 @@ Un corso appartiene a una sola tipologia.
 **Filtri**
 
 - nome del corso
-- tipologia di corso
+- tipologia di corso (nome)
+- tipologia di corso (id)
 
 ---
 
@@ -105,7 +106,7 @@ Un corso appartiene a una sola tipologia.
 ## 4. Requisiti database
 
 - Database relazionale MySQL-compatible
-- Utilizzo di TiDB Cloud come database remoto
+- Utilizzo di un DB MySQL-compatible (TiDB Cloud consigliato)
 - Presenza di file `migrations.sql`
 - Tutte le query devono usare prepared statements
 - Vincoli di integrità referenziale (FK)

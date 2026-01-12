@@ -1,117 +1,144 @@
 # reach17-backend
 
-Reach17 - REST API Node/Express + MySQL (Start2Impact)
+Reach17 e una REST API in Node.js + Express con database MySQL-compatible
+(TiDB Cloud). Il dominio copre tipologie di corso, corsi, atenei e le
+associazioni many-to-many tra corsi e atenei.
+
+## Scopo dell'API
+
+- Gestire CRUD di course types, courses e universities.
+- Gestire associazioni corso-ateneo.
+- Restituire corsi con tipologia e atenei associati.
 
 ## Requisiti
 
 - Node.js 20.x
-- Database MySQL-compatible (es. TiDB Cloud)
+- Database MySQL-compatible (TiDB Cloud o MySQL locale)
 
-## Installazione
+## Setup locale
 
 ```bash
 npm install
 cp .env.example .env
 ```
 
-## Configurazione (.env)
+Compila `.env`, poi:
 
-Compila `.env` con le credenziali del database e, in produzione, `CORS_ORIGIN`.
-Se `CORS_ORIGIN` è vuoto in produzione, nessun origin viene autorizzato.
+```bash
+npm run db:migrate
+npm run db:seed
+npm run db:smoke
+```
 
-Variabili principali:
+Avvio server:
+
+```bash
+npm run dev
+# oppure
+npm start
+```
+
+## Configurazione ambiente (.env)
+
+Variabili realmente usate:
 
 - `PORT` (opzionale, default `3000`)
-- `CORS_ORIGIN` (solo produzione; lista separata da virgola)
-- `TIDB_HOST`
+- `NODE_ENV` (opzionale; in `production` abilita CORS ristretto e disabilita i log)
+- `CORS_ORIGIN` (solo `production`; lista separata da virgola)
+- `TIDB_HOST` (host DB)
 - `TIDB_PORT` (default `4000`)
 - `TIDB_USER`
 - `TIDB_PASSWORD`
 - `TIDB_DATABASE`
-- `TIDB_ENABLE_SSL` (`true`/`false`)
+- `TIDB_ENABLE_SSL` (`true`/`false` come stringa)
 
-## Verifica database
+Note:
 
-```bash
-npm run db:smoke
-```
+- In `production`, se `CORS_ORIGIN` e vuoto, nessun origin viene autorizzato.
+- In `development`, CORS e aperto su tutti gli origin.
+- `TIDB_ENABLE_SSL=true` abilita TLS (richiesto su TiDB Cloud).
 
-## Migrazioni
+## Database
 
-Lo schema e disponibile in `migrations.sql`. Esegui le migrazioni con il client
-MySQL compatibile (es. TiDB Cloud) secondo il tuo ambiente oppure:
+Migrazioni:
 
 ```bash
 npm run db:migrate
 ```
 
-Lo script usa le credenziali presenti in `.env`.
+`migrations.sql` elimina e ricrea le tabelle (DROP + CREATE). Usalo solo su un
+DB che puo' essere ricostruito.
 
-## Dati demo (seed)
-
-Il file `seed.sql` inserisce dati di esempio per tipologie, atenei, corsi e
-associazioni. Esegui il seed con:
+Seed demo:
 
 ```bash
 npm run db:seed
 ```
 
-Lo script e' idempotente: se lanciato piu' volte non duplica i record.
+`seed.sql` inserisce dati di esempio ed e idempotente (`INSERT IGNORE`).
+
+Smoke test:
+
+```bash
+npm run db:smoke
+```
+
+Esegue `SELECT 1` per verificare la connessione.
+
+## SQL safety
+
+- Le query API usano `mysql2.execute()` con placeholder `?` e parametri separati.
+- Non c'e concatenazione di input utente nelle query esposte dalle API.
+- Migrazioni e seed eseguono SQL statico da file (`migrations.sql`, `seed.sql`).
 
 ## Test
+
+Unit test:
 
 ```bash
 npm test
 ```
 
-Lint:
-
-```bash
-npm run lint
-```
-
-Test di integrazione su DB reale (richiede `.env` configurato):
+Integration test (usa il DB reale e scrive dati):
 
 ```bash
 npm run test:integration
 ```
 
-Lo script imposta `RUN_INTEGRATION=true` ed esegue solo i test in `test/integration`
-su Windows/macOS/Linux.
+Lo script imposta `RUN_INTEGRATION=true` e richiede `.env` completo.
 
-## Avvio
+## API documentation
 
-```bash
-npm start
-```
+- Base URL: `/api/v1`
+- Health check: `GET /api/v1/health` (anche `GET /health`)
+- Swagger UI: `http://localhost:3000/api-docs`
+- OpenAPI raw: `http://localhost:3000/openapi`
 
-Per sviluppo con reload:
-
-```bash
-npm run dev
-```
-
-## Deploy su Vercel
+## Deploy (Vercel)
 
 - Importa il repository in Vercel.
-- Imposta Node 20 e le variabili d'ambiente (stesse di `.env`).
-- Configura `CORS_ORIGIN` con il dominio del front-end (se vuoto, in produzione
-  nessun origin viene autorizzato).
-- Se usi funzioni serverless, valuta un adapter Express o un `vercel.json` dedicato.
+- Imposta Node 20.
+- Configura le variabili d'ambiente: `TIDB_HOST`, `TIDB_PORT`, `TIDB_USER`,
+  `TIDB_PASSWORD`, `TIDB_DATABASE`, `TIDB_ENABLE_SSL` (e `CORS_ORIGIN` se
+  `NODE_ENV=production`).
+- Esegui migrazioni/seed sul DB target prima del deploy.
 
-## Swagger
+Nota serverless:
 
-- Swagger UI: `http://localhost:3000/api-docs`.
-- Spec OpenAPI: `src/docs/openapi.yaml` (raw: `http://localhost:3000/openapi`).
-- Per testare: avvia il server e apri l'URL `/api-docs` nel browser.
+- Il pool DB e creato a livello di modulo (`connectionLimit: 5`). In ambienti
+  serverless possono esistere piu' istanze in parallelo: verifica i limiti di
+  connessione del DB e adegua il piano/limitazioni.
 
-## Note operative
+## Scelte progettuali
 
-- `CORS_ORIGIN` in produzione accetta una lista separata da virgola.
-- TiDB Cloud richiede TLS/SSL: imposta `TIDB_ENABLE_SSL=true` se richiesto.
+- Architettura a livelli: routes -> controllers -> services -> repositories -> DB.
+- Gestione errori centralizzata con `AppError` e formato risposta coerente.
+- Vincoli DB (unique e FK) mappati a `409 CONFLICT`.
+- Delete corso: rimuove prima le associazioni in `course_universities`.
 
-## Documentazione
+## Documentazione tecnica
 
 - Contratto API: `src/docs/api-contract.md`
 - Schema DB: `src/docs/db-schema.md`
-- Requisiti e casi d'uso: `src/docs/requirements.md`, `src/docs/use-cases.md`
+- Requisiti: `src/docs/requirements.md`
+- Use cases: `src/docs/use-cases.md`

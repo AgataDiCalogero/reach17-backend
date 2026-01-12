@@ -32,6 +32,7 @@
 
 - 400: dati mancanti
 - 404: tipologia non trovata
+- 409: corso gia' esistente
 
 ---
 
@@ -72,7 +73,7 @@
 ## Caso d’uso 5 – Ottenere corsi con filtri
 
 **Attore:** client API  
-**Input:** filtri opzionali (nome corso, tipologia)
+**Input:** filtri opzionali (nome corso, tipologia o id tipologia)
 
 **Flusso**
 
@@ -98,3 +99,4 @@
 **Errori**
 
 - 404: corso non trovato
+- 409: corso in uso

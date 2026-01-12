@@ -4,10 +4,18 @@ info:
   version: 1.0.0
 servers:
   - url: /api/v1
+tags:
+  - name: Health
+  - name: Course Types
+  - name: Universities
+  - name: Courses
+  - name: Associations
 paths:
   /health:
     get:
       summary: Verifica stato
+      tags:
+        - Health
       responses:
         '200':
           description: Servizio operativo
@@ -23,6 +31,8 @@ paths:
   /course-types:
     get:
       summary: Lista tipologie di corso
+      tags:
+        - Course Types
       responses:
         '200':
           description: Lista tipologie
@@ -34,6 +44,8 @@ paths:
                   $ref: '#/components/schemas/CourseType'
     post:
       summary: Crea una tipologia di corso
+      tags:
+        - Course Types
       requestBody:
         required: true
         content:
@@ -54,6 +66,8 @@ paths:
   /course-types/{id}:
     patch:
       summary: Aggiorna una tipologia di corso
+      tags:
+        - Course Types
       parameters:
         - $ref: '#/components/parameters/IdPath'
       requestBody:
@@ -77,6 +91,8 @@ paths:
           $ref: '#/components/responses/Conflict'
     delete:
       summary: Elimina una tipologia di corso
+      tags:
+        - Course Types
       parameters:
         - $ref: '#/components/parameters/IdPath'
       responses:
@@ -89,6 +105,8 @@ paths:
   /universities:
     get:
       summary: Lista atenei
+      tags:
+        - Universities
       responses:
         '200':
           description: Lista atenei
@@ -100,6 +118,8 @@ paths:
                   $ref: '#/components/schemas/University'
     post:
       summary: Crea un ateneo
+      tags:
+        - Universities
       requestBody:
         required: true
         content:
@@ -120,6 +140,8 @@ paths:
   /universities/{id}:
     patch:
       summary: Aggiorna un ateneo
+      tags:
+        - Universities
       parameters:
         - $ref: '#/components/parameters/IdPath'
       requestBody:
@@ -143,6 +165,8 @@ paths:
           $ref: '#/components/responses/Conflict'
     delete:
       summary: Elimina un ateneo
+      tags:
+        - Universities
       parameters:
         - $ref: '#/components/parameters/IdPath'
       responses:
@@ -154,7 +178,10 @@ paths:
           $ref: '#/components/responses/Conflict'
   /courses:
     get:
-      summary: Lista corsi con atenei e tipologia
+      summary: Lista corsi
+      description: Include atenei e tipologia di corso.
+      tags:
+        - Courses
       parameters:
         - name: name
           in: query
@@ -183,6 +210,8 @@ paths:
           $ref: '#/components/responses/BadRequest'
     post:
       summary: Crea un corso
+      tags:
+        - Courses
       requestBody:
         required: true
         content:
@@ -205,6 +234,8 @@ paths:
   /courses/{id}:
     patch:
       summary: Aggiorna un corso
+      tags:
+        - Courses
       parameters:
         - $ref: '#/components/parameters/IdPath'
       requestBody:
@@ -228,6 +259,8 @@ paths:
           $ref: '#/components/responses/Conflict'
     delete:
       summary: Elimina un corso
+      tags:
+        - Courses
       parameters:
         - $ref: '#/components/parameters/IdPath'
       responses:
@@ -240,6 +273,8 @@ paths:
   /courses/{courseId}/universities/{universityId}:
     post:
       summary: Crea associazione corso-ateneo
+      tags:
+        - Associations
       parameters:
         - $ref: '#/components/parameters/CourseIdPath'
         - $ref: '#/components/parameters/UniversityIdPath'
@@ -258,6 +293,8 @@ paths:
           $ref: '#/components/responses/Conflict'
     delete:
       summary: Elimina associazione corso-ateneo
+      tags:
+        - Associations
       parameters:
         - $ref: '#/components/parameters/CourseIdPath'
         - $ref: '#/components/parameters/UniversityIdPath'

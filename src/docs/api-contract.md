@@ -6,6 +6,7 @@
 - Content-Type: `application/json` (solo JSON)
 - Naming risorse: plurale, kebab-case (`course-types`, `universities`, `courses`)
 - ID: intero numerico (auto-increment DB)
+- Health check: `GET /api/v1/health`
 - Formato errore (sempre):
 
 ```json
@@ -25,6 +26,7 @@ Esempio:
 ```
 
 - Status code standard: `200`, `201`, `204`, `400`, `404`, `409`
+- `500` per errori non previsti
 - Errori da vincoli DB mappati a:
   - `409` per conflitti di duplicate/unique e PK composta
   - `409` per FK RESTRICT (delete bloccata da referenze)
@@ -153,9 +155,9 @@ Esempio:
 
 - Metodo + Path: `GET /api/v1/courses`
 - Parametri query (opzionali):
-  - `name` (string, partial match)
-  - `course_type` (string, match su `course_types.name`)
-  - `course_type_id` (number, optional extra)
+  - `name` (string, match parziale su `courses.name`)
+  - `course_type` (string, match esatto su `course_types.name`)
+  - `course_type_id` (number)
 - Se presenti entrambi, `course_type_id` ha precedenza su `course_type`.
 - Risposta:
   - `200`
@@ -187,6 +189,7 @@ Esempio:
   - `204`
 - Errori:
   - `404` `COURSE_NOT_FOUND`
+  - `409` `CONFLICT` (corso in uso)
 
 Nota: la delete deve gestire le associazioni nella join table (DB constraint, cascade o delete manuale).
 
@@ -233,7 +236,7 @@ Nota: la delete deve gestire le associazioni nella join table (DB constraint, ca
 
 - CRUD completo per: course-types, courses, universities
 - Endpoint N:N create + delete
-- `GET /courses` ritorna corsi + atenei e supporta filtri per `name` e `course_type`
+- `GET /courses` ritorna corsi + atenei e supporta filtri per `name`, `course_type`, `course_type_id`
 - Decisioni critiche definite (vedi sotto)
 
 ---
