@@ -46,6 +46,21 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 // Routes
+app.get('/', (_req, res) => {
+  res.status(200).json({
+    name: 'Reach17 API',
+    version: '1.0.0',
+    docs: '/api-docs',
+    openapi: '/openapi',
+    health: '/health',
+    apiHealth: '/api/v1/health',
+    resources: {
+      courseTypes: '/api/v1/course-types',
+      universities: '/api/v1/universities',
+      courses: '/api/v1/courses',
+    },
+  })
+})
 app.use('/health', healthRouter)
 app.use('/api/v1/health', healthRouter)
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openApiDocument))
