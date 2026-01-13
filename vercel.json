@@ -7,6 +7,12 @@
   },
   "routes": [
     { "handle": "filesystem" },
+    { "src": "/api-docs/(.*)", "dest": "/api/index" },
+    { "src": "/api-docs", "dest": "/api/index" },
+    { "src": "/openapi", "dest": "/api/index" },
+    { "src": "/health", "dest": "/api/index" },
+    { "src": "/api/v1/(.*)", "dest": "/api/index" },
+    { "src": "/api/v1", "dest": "/api/index" },
     { "src": "/(.*)", "dest": "/api/index" }
   ]
 }
