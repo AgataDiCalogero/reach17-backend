@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon src/server.js",
+    "dev:vercel": "vercel dev",
     "start": "node src/server.js",
     "test": "mocha",
     "test:integration": "cross-env RUN_INTEGRATION=true mocha \"test/integration/**/*.test.js\"",

@@ -150,3 +150,5 @@ Desktop.ini
 .vscode/
 .idea/
 *.iml
+.vercel
+.env*.local
