@@ -2,8 +2,11 @@
   "version": 2,
   "functions": {
     "api/index.js": {
-      "includeFiles": "src/docs/**"
+      "includeFiles": ["src/docs/openapi.yaml"]
     }
   },
-  "rewrites": [{ "source": "/(.*)", "destination": "/api/index" }]
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "dest": "/api/index" }
+  ]
 }
