@@ -2,7 +2,7 @@
   "version": 2,
   "functions": {
     "api/index.js": {
-      "includeFiles": "src/docs/openapi.yaml"
+      "includeFiles": "{src/docs/openapi.yaml,node_modules/swagger-ui-dist/**}"
     }
   },
   "routes": [
@@ -13,6 +13,6 @@
     { "src": "/health", "dest": "/api/index" },
     { "src": "/api/v1/(.*)", "dest": "/api/index" },
     { "src": "/api/v1", "dest": "/api/index" },
-    { "src": "/(.*)", "dest": "/api/index" }
+    { "src": "/", "dest": "/api/index" }
   ]
 }
