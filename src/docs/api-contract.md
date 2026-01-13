@@ -2,7 +2,8 @@
 
 ## Convenzioni API
 
-- Base URL: `/api/v1`
+- Base URL (local): `/api/v1`
+- Base URL (prod): `https://reach17-backend.vercel.app/api/v1`
 - Content-Type: `application/json` (solo JSON)
 - Naming risorse: plurale, kebab-case (`course-types`, `universities`, `courses`)
 - ID: intero numerico (auto-increment DB)

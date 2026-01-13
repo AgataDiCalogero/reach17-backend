@@ -109,10 +109,13 @@ Lo script imposta `RUN_INTEGRATION=true` e richiede `.env` completo.
 
 ## API documentation
 
-- Base URL: `/api/v1`
+- Base URL (local): `/api/v1`
+- Base URL (prod): `https://reach17-backend.vercel.app/api/v1`
 - Health check: `GET /api/v1/health` (anche `GET /health`)
-- Swagger UI: `http://localhost:3000/api-docs`
-- OpenAPI raw: `http://localhost:3000/openapi`
+- Swagger UI (local): `http://localhost:3000/api-docs`
+- Swagger UI (prod): `https://reach17-backend.vercel.app/api-docs`
+- OpenAPI raw (local): `http://localhost:3000/openapi`
+- OpenAPI raw (prod): `https://reach17-backend.vercel.app/openapi`
 
 ## Deploy (Vercel)
 

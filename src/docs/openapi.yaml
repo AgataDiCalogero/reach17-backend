@@ -3,7 +3,10 @@ info:
   title: Reach17 API
   version: 1.0.0
 servers:
+  - url: https://reach17-backend.vercel.app/api/v1
+    description: Production (Vercel)
   - url: /api/v1
+    description: Local
 tags:
   - name: Health
   - name: Course Types
