@@ -51,6 +51,9 @@ Variabili realmente usate:
 - `TIDB_PASSWORD`
 - `TIDB_DATABASE`
 - `TIDB_ENABLE_SSL` (`true`/`false` come stringa)
+- `TIDB_CONNECTION_LIMIT` (opzionale, default `5`)
+- `TIDB_QUEUE_LIMIT` (opzionale, default `0`)
+- `TIDB_CONNECT_TIMEOUT` (opzionale, default `10000` ms)
 
 Note:
 
@@ -122,15 +125,16 @@ Lo script imposta `RUN_INTEGRATION=true` e richiede `.env` completo.
 - Importa il repository in Vercel.
 - Imposta Node 20.
 - Configura le variabili d'ambiente: `TIDB_HOST`, `TIDB_PORT`, `TIDB_USER`,
-  `TIDB_PASSWORD`, `TIDB_DATABASE`, `TIDB_ENABLE_SSL` (e `CORS_ORIGIN` se
-  `NODE_ENV=production`).
+  `TIDB_PASSWORD`, `TIDB_DATABASE`, `TIDB_ENABLE_SSL` (opzionali:
+  `TIDB_CONNECTION_LIMIT`, `TIDB_QUEUE_LIMIT`, `TIDB_CONNECT_TIMEOUT`) e
+  `CORS_ORIGIN` se `NODE_ENV=production`.
 - Esegui migrazioni/seed sul DB target prima del deploy.
 
 Nota serverless:
 
-- Il pool DB e creato a livello di modulo (`connectionLimit: 5`). In ambienti
-  serverless possono esistere piu' istanze in parallelo: verifica i limiti di
-  connessione del DB e adegua il piano/limitazioni.
+- Il pool DB e creato a livello di modulo (`connectionLimit` configurabile via
+  env). In ambienti serverless possono esistere piu' istanze in parallelo:
+  verifica i limiti di connessione del DB e adegua il piano/limitazioni.
 
 ## Scelte progettuali
 
