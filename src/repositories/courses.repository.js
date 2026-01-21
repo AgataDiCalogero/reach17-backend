@@ -77,9 +77,9 @@ async function updateById(id, { name, course_type_id }) {
   return findById(id)
 }
 
-async function deleteById(id) {
+async function deleteById(id, connection = null) {
   const deleteSql = 'DELETE FROM courses WHERE id = ?'
-  const [result] = await execute(deleteSql, [id])
+  const [result] = await execute(deleteSql, [id], connection)
   return result.affectedRows > 0
 }
 

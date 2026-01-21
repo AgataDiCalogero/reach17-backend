@@ -2,6 +2,7 @@ const AppError = require('../errors/AppError')
 const coursesRepository = require('../repositories/courses.repository')
 const courseTypesRepository = require('../repositories/courseTypes.repository')
 const courseUniversitiesRepository = require('../repositories/courseUniversities.repository')
+const { withTransaction } = require('../db/transaction')
 const {
   isDuplicateError,
   isFkNotFoundError,
@@ -168,13 +169,15 @@ async function updateCourse(id, { name, course_type_id }) {
 async function deleteCourse(id) {
   const numericId = toCourseId(id)
   try {
-    await courseUniversitiesRepository.deleteByCourseId(numericId)
-    const deleted = await coursesRepository.deleteById(numericId)
-    if (!deleted) {
-      throw new AppError(404, 'COURSE_NOT_FOUND', 'Corso non trovato', [
-        { field: 'id', value: numericId },
-      ])
-    }
+    await withTransaction(async (connection) => {
+      await courseUniversitiesRepository.deleteByCourseId(numericId, connection)
+      const deleted = await coursesRepository.deleteById(numericId, connection)
+      if (!deleted) {
+        throw new AppError(404, 'COURSE_NOT_FOUND', 'Corso non trovato', [
+          { field: 'id', value: numericId },
+        ])
+      }
+    })
   } catch (err) {
     if (isFkRestrictError(err)) {
       throw new AppError(409, 'CONFLICT', 'Corso in uso', [

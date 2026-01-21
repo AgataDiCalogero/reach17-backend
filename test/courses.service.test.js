@@ -5,6 +5,7 @@ const coursesService = require('../src/services/courses.service')
 const coursesRepository = require('../src/repositories/courses.repository')
 const courseTypesRepository = require('../src/repositories/courseTypes.repository')
 const courseUniversitiesRepository = require('../src/repositories/courseUniversities.repository')
+const transaction = require('../src/db/transaction')
 
 async function expectAppError(promise, { status, code }) {
   try {
@@ -63,6 +64,9 @@ describe('courses service', () => {
   })
 
   it('deleteCourse returns 404 when repo returns false', async () => {
+    sinon
+      .stub(transaction, 'withTransaction')
+      .callsFake(async (work) => work({}))
     sinon.stub(courseUniversitiesRepository, 'deleteByCourseId').resolves(true)
     sinon.stub(coursesRepository, 'deleteById').resolves(false)
 
@@ -73,6 +77,9 @@ describe('courses service', () => {
   })
 
   it('deleteCourse maps FK restrict to 409', async () => {
+    sinon
+      .stub(transaction, 'withTransaction')
+      .callsFake(async (work) => work({}))
     sinon.stub(courseUniversitiesRepository, 'deleteByCourseId').resolves(true)
     sinon.stub(coursesRepository, 'deleteById').rejects({ errno: 1451 })
 

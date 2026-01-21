@@ -14,9 +14,9 @@ async function deleteAssociation(courseId, universityId) {
   return result.affectedRows > 0
 }
 
-async function deleteByCourseId(courseId) {
+async function deleteByCourseId(courseId, connection = null) {
   const deleteSql = 'DELETE FROM course_universities WHERE course_id = ?'
-  const [result] = await execute(deleteSql, [courseId])
+  const [result] = await execute(deleteSql, [courseId], connection)
   return result.affectedRows > 0
 }
 
