@@ -7,7 +7,7 @@
 - Content-Type: `application/json` (solo JSON)
 - Naming risorse: plurale, kebab-case (`course-types`, `universities`, `courses`)
 - ID: intero numerico (auto-increment DB)
-- Health check: `GET /api/v1/health`
+- Health check: `GET /api/v1/health` (200 `{ "status": "ok", "db": "ok" }`, 503 `{ "status": "error", "db": "down" }` se DB non raggiungibile)
 - Formato errore (sempre):
 
 ```json

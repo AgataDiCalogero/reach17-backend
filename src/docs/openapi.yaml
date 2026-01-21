@@ -29,8 +29,25 @@ paths:
                 properties:
                   status:
                     type: string
+                  db:
+                    type: string
                 required:
                   - status
+                  - db
+        '503':
+          description: Database non raggiungibile
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  db:
+                    type: string
+                required:
+                  - status
+                  - db
   /course-types:
     get:
       summary: Lista tipologie di corso
